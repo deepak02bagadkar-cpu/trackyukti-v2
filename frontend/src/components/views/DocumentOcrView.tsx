@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useApp } from "../../context/AppContext";
+import { useApp, getApiUrl } from "../../context/AppContext";
 import { DocumentItem } from "../../types";
 import {
   FileText,
@@ -34,7 +34,7 @@ export const DocumentOcrView: React.FC = () => {
   const handleSimulatedUpload = async (presetName: string, presetType: string) => {
     setIsProcessing(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/documents/ocr/vision", {
+      const res = await fetch(getApiUrl("/api/documents/ocr/vision"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -69,7 +69,7 @@ export const DocumentOcrView: React.FC = () => {
       reader.onload = async () => {
         const base64 = reader.result as string;
         try {
-          const res = await fetch("http://127.0.0.1:8000/api/documents/ocr/vision", {
+          const res = await fetch(getApiUrl("/api/documents/ocr/vision"), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

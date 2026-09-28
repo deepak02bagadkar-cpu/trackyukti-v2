@@ -24,7 +24,20 @@ import {
   COMMON_DEPARTMENTS,
 } from "../data/coalCompanies";
 
-const API_BASE = "http://127.0.0.1:8000/api";
+export const getApiUrl = (endpoint: string) => {
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  if (typeof window !== "undefined") {
+    if (window.location.port === "3000") {
+      return `http://127.0.0.1:8000${cleanEndpoint}`;
+    }
+    return cleanEndpoint;
+  }
+  return `http://127.0.0.1:8000${cleanEndpoint}`;
+};
+
+const API_BASE = typeof window !== "undefined" && window.location.port === "3000"
+  ? "http://127.0.0.1:8000/api"
+  : "/api";
 
 const DEMO_USERS: Record<string, User> = {
   ADMIN: {

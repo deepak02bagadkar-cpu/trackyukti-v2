@@ -114,8 +114,8 @@ class RealtimeAlertBroadcast(BaseModel):
 
 # --- Endpoints ---
 
-@app.get("/")
-def root():
+@app.get("/api/info")
+def root_info():
     return {
         "project": "KHAN DRISHTI (खान दृष्टि)",
         "tagline": "Smart Governance Platform for Coal Mines",
@@ -766,4 +766,44 @@ def reset_demo_state():
     """Resets the mock store to the pristine evaluator demo baseline."""
     db.reset()
     return {"message": "Demo state reset to initial baseline (Risk: 72/100).", "risk": calculate_governance_risk(db)}
+
+# ============================================================================
+# Static Files & Frontend Mount (Unified Single Deployment)
+# ============================================================================
+from fastapi.staticfiles import StaticFiles
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CANDIDATE_DIRS = [
+    os.path.join(BASE_DIR, "frontend", "out"),
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "frontend", "out"),
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "out"),
+    os.path.join(BASE_DIR, "out"),
+    "frontend/out",
+    "out",
+]
+
+STATIC_DIR = None
+for candidate in CANDIDATE_DIRS:
+    if os.path.exists(candidate) and os.path.exists(os.path.join(candidate, "index.html")):
+        STATIC_DIR = candidate
+        break
+
+if STATIC_DIR:
+    # Mount Next.js static build so visiting / opens the complete KHAN DRISHTI platform!
+    app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
+else:
+    @app.get("/")
+    def fallback_root():
+        return {
+            "project": "KHAN DRISHTI (खान दृष्टि)",
+            "tagline": "Smart Governance Platform for Coal Mines",
+            "motto": "Integrated Governance | Compliance | Transparency",
+            "ps_id": "26024",
+            "status": "Online",
+            "version": "2.0.0",
+            "docs": "/docs",
+            "api_info": "/api/info"
+        }
+
 

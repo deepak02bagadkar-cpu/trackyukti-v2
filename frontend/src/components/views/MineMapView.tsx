@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { useApp } from "../../context/AppContext";
+import { useApp, getApiUrl } from "../../context/AppContext";
 import { GISHotspot } from "../../types";
 import { getMineCoordinates } from "../../data/coalCompanies";
 import {
@@ -55,7 +55,7 @@ export const MineMapView: React.FC = () => {
     const lon = coords.lng;
     const mineName = hierarchy.mineId === "ALL_MINES" ? "Pan-India Cluster" : (selectedMine?.name ?? "Gevra Mega Opencast");
 
-    fetch(`http://127.0.0.1:8000/api/weather/telemetry?lat=${lat}&lon=${lon}&mine_name=${encodeURIComponent(mineName)}`)
+    fetch(getApiUrl(`/api/weather/telemetry?lat=${lat}&lon=${lon}&mine_name=${encodeURIComponent(mineName)}`))
       .then((res) => res.json())
       .then((data) => setWeatherData(data))
       .catch(() => {});

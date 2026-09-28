@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useApp } from "../../context/AppContext";
+import { useApp, getApiUrl } from "../../context/AppContext";
 import {
   Bot,
   Send,
@@ -81,7 +81,7 @@ export const AiAssistantView: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/ai/query", {
+      const res = await fetch(getApiUrl("/api/ai/query"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
