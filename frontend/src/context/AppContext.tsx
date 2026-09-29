@@ -164,8 +164,8 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(DEMO_USERS.ADMIN);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [isOffline, setIsOffline] = useState<boolean>(false);
   const [demoMode, setDemoMode] = useState<boolean>(true);
